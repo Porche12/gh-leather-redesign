@@ -45,7 +45,7 @@ if(window.gsap && window.ScrollTrigger){
    gsap.from('.hero-copy > .eyebrow, .hero h1, .hero-desc, .hero-copy > .button',{y:18,opacity:0,duration:.8,stagger:.1,ease:'power2.out',clearProps:'all'});
    gsap.from('.hero-visual',{opacity:0,y:22,duration:1,ease:'power2.out',clearProps:'all'});
   };
-  if(document.querySelector('.jacket-intro'))document.addEventListener('atelier:intro-finished',revealHero,{once:true});
+  if(document.querySelector('.sewing-intro'))document.addEventListener('atelier:intro-finished',revealHero,{once:true});
   else revealHero();
   document.querySelectorAll('.section-heading, .works-heading, .approach h2, .faq-section h2, .contact-top').forEach(element=>{
    gsap.from(element,{y:24,duration:.75,ease:'power2.out',clearProps:'all',scrollTrigger:{trigger:element,start:'top 92%',once:true}});

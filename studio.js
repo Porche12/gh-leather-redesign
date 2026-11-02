@@ -1,7 +1,7 @@
 /* Original procedural leather studies, not representations of actual orders. */
 const stage = document.querySelector('#model-stage');
 const hint = document.querySelector('#model-hint');
-document.querySelector('.replay-intro').addEventListener('click', () => window.openAtelierJacket?.());
+document.querySelector('.replay-intro').addEventListener('click', () => window.playAtelierIntro?.());
 let started = false;
 async function startStudio() {
   if (started) return;
@@ -30,7 +30,7 @@ function buildStudio(T) {
   const canvas=renderer.domElement;
   canvas.tabIndex=0;
   canvas.setAttribute('role','img');
-  canvas.setAttribute('aria-label','Интерактивная кожаная куртка. Стрелки вращают модель, плюс и минус меняют масштаб.');
+  canvas.setAttribute('aria-label','Интерактивная кожаная сумка. Стрелки вращают модель, плюс и минус меняют масштаб.');
   canvas.setAttribute('aria-describedby','model-hint');
   const scene=new T.Scene();
   const camera=new T.PerspectiveCamera(33,1,.1,100);
@@ -53,8 +53,6 @@ function buildStudio(T) {
   const leatherMaterials=[];
   function leather(){const material=new T.MeshPhysicalMaterial({color:0x382820,roughness:.48,metalness:.02,clearcoat:.22,clearcoatRoughness:.48,bumpMap:grain,bumpScale:.018,roughnessMap:grain});leatherMaterials.push(material);return material;}
   const skin=leather();
-  const lining=new T.MeshStandardMaterial({color:0x191311,roughness:.9});
-  const ribbing=new T.MeshStandardMaterial({color:0x211b18,roughness:.9,bumpMap:grain,bumpScale:.025});
   const metal=new T.MeshStandardMaterial({color:0xc7b18b,metalness:.86,roughness:.27});
   const thread=new T.LineDashedMaterial({color:0xb49a77,dashSize:.014,gapSize:.009,transparent:true,opacity:.68});
   function seam(group,points,closed=false){
@@ -83,49 +81,6 @@ function buildStudio(T) {
     const outer=roundedShape(-w/2,-h/2,w,h,.025);
     const hole=new T.Path();const hw=w/2-.018,hh=h/2-.018;hole.moveTo(-hw,-hh);hole.lineTo(-hw,hh);hole.lineTo(hw,hh);hole.lineTo(hw,-hh);hole.closePath();outer.holes.push(hole);
     const m=extrude(group,outer,.018,metal,z,.008);m.position.x=x;m.position.y=y;return m;
-  }
-
-  function jacket() {
-    const g=new T.Group();
-    // Rounded torso and separate front panels, with an actual back and lining.
-    const torso=pathShape([[-.58,-.9],[.58,-.9],[.67,.50],[.48,.76],[.27,.84],[0,.55],[-.27,.84],[-.48,.76],[-.67,.50]]);
-    extrude(g,torso,.30,skin,-.10,.095);
-    extrude(g,pathShape([[-.21,.60],[0,.49],[.21,.60],[.12,.82],[-.12,.82]]),.015,lining,.18,.012);
-    // Lapels are layered and gently pitched above the body.
-    const lapelL=extrude(g,pathShape([[-.27,.84],[-.51,.55],[-.23,.22],[-.06,.47]]),.045,skin,.31,.018);
-    lapelL.rotation.y=-.12;
-    const lapelR=extrude(g,pathShape([[.27,.84],[.51,.55],[.23,.22],[.06,.47]]),.045,skin,.31,.018);
-    lapelR.rotation.y=.12;
-    seam(g,[[-.27,.81,.385],[-.47,.55,.385],[-.23,.26,.385],[-.08,.47,.385]],true);
-    seam(g,[[.27,.81,.385],[.47,.55,.385],[.23,.26,.385],[.08,.47,.385]],true);
-    // Tapered bent sleeves, built from radial rings rather than box primitives.
-    for(const sign of [-1,1]){
-      const curve=new T.CatmullRomCurve3([new T.Vector3(sign*.54,.56,-.025),new T.Vector3(sign*.79,.32,0),new T.Vector3(sign*.94,-.16,.03),new T.Vector3(sign*1.05,-.67,.09)]);
-      const positions=[],uvs=[],indices=[];const n=24,sides=24;
-      for(let i=0;i<=n;i++){
-        const t=i/n,c=curve.getPoint(t),tangent=curve.getTangent(t).normalize();const basis=new T.Vector3(0,0,1);const across=new T.Vector3().crossVectors(tangent,basis).normalize();
-        const radius=.215-t*.085+Math.sin(t*Math.PI)*.012;
-        for(let j=0;j<=sides;j++){const a=j/sides*Math.PI*2;const p=c.clone().addScaledVector(basis,Math.cos(a)*radius*.9).addScaledVector(across,Math.sin(a)*radius);positions.push(p.x,p.y,p.z);uvs.push(j/sides,t);if(i<n&&j<sides){const q=i*(sides+1)+j;indices.push(q,q+sides+1,q+1,q+1,q+sides+1,q+sides+2);}}
-      }
-      const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(positions,3));geo.setAttribute('uv',new T.Float32BufferAttribute(uvs,2));geo.setIndex(indices);geo.computeVertexNormals();mesh(g,geo,skin);
-      const cuff=mesh(g,new T.CylinderGeometry(.134,.13,.13,32),ribbing,sign*1.05,-.68,.09);cuff.rotation.z=sign*-.2;
-      seam(g,[[sign*.56,.54,.18],[sign*.76,.23,.19],[sign*.9,-.18,.19],[sign*1.02,-.62,.19]]);
-      const pocket=box(g,.30,.018,.014,lining,sign*.38,-.31,.325);pocket.rotation.z=sign*-.25;
-      const zip=box(g,.28,.012,.025,metal,sign*.38,-.31,.34);zip.rotation.z=sign*-.25;
-      seam(g,[[sign*.21,-.27,.35],[sign*.54,-.35,.35]]);
-      mesh(g,new T.SphereGeometry(.025,12,8),metal,sign*.30,.52,.40);
-    }
-    box(g,1.13,.115,.27,ribbing,0,-.88,.0);
-    box(g,.035,1.33,.025,lining,0,-.23,.325);
-    const teeth=new T.InstancedMesh(new T.BoxGeometry(.022,.013,.017),metal,112);
-    const matrix=new T.Matrix4();
-    for(let i=0;i<56;i++){matrix.makeTranslation(-.012,-.86+i*.023,.35);teeth.setMatrixAt(i*2,matrix);matrix.makeTranslation(.012,-.849+i*.023,.35);teeth.setMatrixAt(i*2+1,matrix);}g.add(teeth);
-    const pull=ring(g,0,.28,.37,.07,.13);pull.rotation.z=-.12;
-    seam(g,[[-.54,-.79,.32],[-.57,-.1,.32],[-.61,.45,.30]]);
-    seam(g,[[.54,-.79,.32],[.57,-.1,.32],[.61,.45,.30]]);
-    seam(g,[[-.5,.65,-.30],[0,.50,-.30],[.5,.65,-.30]]);
-    g.position.y=.05;
-    return g;
   }
 
   function bag() {
@@ -157,8 +112,7 @@ function buildStudio(T) {
   }
 
   const display=new T.Group();scene.add(display);
-  const jacketModel=jacket(),bagModel=bag();
-  display.add(jacketModel,bagModel);bagModel.visible=false;
+  display.add(bag());
   // A soft, procedural contact shadow, independent of expensive shadow maps.
   const shadowCanvas=document.createElement('canvas');shadowCanvas.width=shadowCanvas.height=128;
   const sc=shadowCanvas.getContext('2d');const gradient=sc.createRadialGradient(64,64,3,64,64,64);gradient.addColorStop(0,'rgba(40,25,12,.25)');gradient.addColorStop(1,'rgba(40,25,12,0)');sc.fillStyle=gradient;sc.fillRect(0,0,128,128);
@@ -183,15 +137,6 @@ function buildStudio(T) {
     if(e.key==='Home'){yaw=-.28;pitch=.035;scale=1;}
     document.querySelector('#model-scale').value=String(Math.round(scale*100));requestDraw();
   });
-  document.querySelectorAll('[data-model]').forEach(button=>button.addEventListener('click',()=>{
-    const isJacket=button.dataset.model==='jacket';jacketModel.visible=isJacket;bagModel.visible=!isJacket;
-    document.querySelectorAll('[data-model]').forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));});
-    const title=isJacket?'Кожаная куртка':'Кожаная сумка';
-    document.querySelector('#model-name').textContent=title;
-    document.querySelector('#model-description').textContent=isJacket?'Выразительный воротник, мягкий объём и металлическая фурнитура. Рассмотрите силуэт со всех сторон.':'Объёмная форма, округлые ручки, аккуратная строчка и тёплый блеск пряжек. Все детали можно рассмотреть вблизи.';
-    canvas.setAttribute('aria-label',`Интерактивная модель: ${title}. Стрелки вращают модель, плюс и минус меняют масштаб.`);
-    yaw=-.28;pitch=.035;requestDraw();
-  }));
   document.querySelectorAll('[data-color]').forEach(button=>button.addEventListener('click',()=>{
     leatherMaterials.forEach(material=>material.color.set(button.dataset.color));
     document.querySelectorAll('[data-color]').forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));});

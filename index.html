@@ -4,11 +4,11 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f4f0e8">
 <title>GH-Leather — ателье кожи, меха и ткани в Волгограде</title>
 <meta name="description" content="Индивидуальный пошив, ремонт, реставрация и покраска одежды, сумок и аксессуаров. GH-Leather: Волгоград, ул. Ангарская, 114.">
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css?v=zip-studio-1"><link rel="stylesheet" href="experience.css?v=zip-studio-1">
-<script defer src="assets/lib/gsap.min.js"></script><script defer src="assets/lib/ScrollTrigger.min.js"></script><script defer src="app.js?v=zip-studio-1"></script><script type="module" src="studio.js"></script>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css?v=stitch-2"><link rel="stylesheet" href="experience.css?v=stitch-2">
+<script defer src="assets/lib/gsap.min.js"></script><script defer src="assets/lib/ScrollTrigger.min.js"></script><script defer src="app.js?v=stitch-2"></script><script type="module" src="studio.js?v=stitch-2"></script>
 </head>
 <body>
-<script src="loader.js"></script>
+<script src="loader.js?v=stitch-2"></script>
 <a class="skip" href="#main">Перейти к содержимому</a>
 <header class="header wrap">
   <a class="brand" href="#top" aria-label="GH-Leather — на главную"><span class="brand-icon" aria-hidden="true">gh<span>✳</span></span><span>GH-LEATHER<small>САЛОН · АТЕЛЬЕ</small></span></a>
@@ -57,18 +57,17 @@
   <div class="studio-heading"><div><p class="eyebrow">ФОРМА В ВАШИХ РУКАХ</p><h2 id="studio-title">Рассмотреть.<br><em>Почувствовать.</em></h2></div><p>Поверните вещь. Поймайте свет на коже.<br>Найдите свой оттенок.</p></div>
   <div class="studio-shell">
     <div class="studio-stage" id="model-stage" aria-busy="true">
-      <svg class="model-poster" viewBox="0 0 700 560" role="img" aria-label="Иллюстрация кожаной куртки"><defs><linearGradient id="posterLeather" x2="1" y2="1"><stop stop-color="#855941"/><stop offset=".6" stop-color="#35261f"/><stop offset="1" stop-color="#53392b"/></linearGradient></defs><ellipse cx="350" cy="465" rx="155" ry="20" fill="#000" opacity=".08"/><g fill="url(#posterLeather)" stroke="#9c7e64" stroke-width="1.5"><path d="M280 115L232 140 164 335 211 351 267 235 270 425 430 425 433 235 489 351 536 335 468 140 420 115 383 105 350 138 317 105Z"/><path d="M317 105L285 151 330 224 350 138Z"/><path d="M383 105L415 151 370 224 350 138Z"/></g><path d="M350 145V425M281 325L326 300M374 300L419 325" stroke="#c9b48e" stroke-width="4" stroke-dasharray="3 3"/><text x="350" y="510" text-anchor="middle" fill="#625f57" font-size="12" font-family="Arial">Кожа. Форма. Характер.</text></svg>
+      <svg class="model-poster" viewBox="0 0 700 560" role="img" aria-label="Иллюстрация кожаной сумки"><defs><linearGradient id="bag-poster" x2="1" y2="1"><stop stop-color="#89563a"/><stop offset="1" stop-color="#35261f"/></linearGradient></defs><ellipse cx="350" cy="457" rx="150" ry="18" fill="#000" opacity=".08"/><g fill="url(#bag-poster)" stroke="#b19775" stroke-width="2"><rect x="200" y="225" width="300" height="215" rx="30"/><path d="M210 233H490V310L468 337H232L210 310Z"/><path d="M272 225V169Q272 112 350 112Q428 112 428 169V225" fill="none" stroke="#5d3c2a" stroke-width="16"/><path d="M275 245V380M425 245V380" stroke-width="13"/><rect x="261" y="335" width="28" height="32" rx="4" fill="none"/><rect x="411" y="335" width="28" height="32" rx="4"/></g><text x="350" y="505" text-anchor="middle" fill="#625f57" font-size="12" font-family="Arial">Кожа. Форма. Характер.</text></svg>
       <span class="studio-watermark" aria-hidden="true">gh</span><span class="studio-hint" id="model-hint">Загрузка интерактивной модели…</span>
     </div>
     <aside class="studio-controls">
       <span class="small-label">ЭСКИЗ В ОБЪЁМЕ</span>
-      <div class="model-tabs" role="group" aria-label="Выбор 3D-модели"><button data-model="jacket" aria-pressed="true" class="active">Куртка</button><button data-model="bag" aria-pressed="false">Сумка</button></div>
-      <h3 id="model-name">Кожаная куртка</h3><p id="model-description">Выразительный воротник, мягкий объём и металлическая фурнитура. Рассмотрите силуэт со всех сторон.</p>
+<h3 id="model-name">Кожаная сумка</h3><p id="model-description">Объёмная форма, округлые ручки, аккуратная строчка и тёплый блеск пряжек. Все детали можно рассмотреть вблизи.</p>
       <span class="small-label color-label">ОТТЕНОК КОЖИ</span>
       <div class="model-colors" role="group" aria-label="Цвет кожи"><button data-color="#382820" aria-label="Эспрессо" aria-pressed="true" class="active" style="--leather-color:#382820"></button><button data-color="#995a32" aria-label="Коньячный" aria-pressed="false" style="--leather-color:#995a32"></button><button data-color="#693331" aria-label="Бордовый" aria-pressed="false" style="--leather-color:#693331"></button></div><p id="color-name" class="color-name" aria-live="polite">Эспрессо</p>
       <div class="model-actions" role="group" aria-label="Управление моделью"><button data-turn="-1" aria-label="Повернуть влево">↶</button><button data-turn="1" aria-label="Повернуть вправо">↷</button><button id="model-reset">Вернуть ракурс</button></div>
       <div class="model-zoom"><label for="model-scale">Масштаб</label><input id="model-scale" type="range" min="80" max="135" value="100"></div>
-      <p class="model-disclaimer">Авторские 3D-эскизы для знакомства с формой и материалом. Не фотографии работ и не каталог готовых изделий.</p><button class="replay-intro" type="button">Посмотреть вступление ↗</button>
+      <p class="model-disclaimer">Авторский 3D-эскиз для знакомства с формой и материалом. Не фотография работы и не готовое изделие.</p><button class="replay-intro" type="button">Посмотреть вступление ↗</button>
     </aside>
   </div>
 </section>

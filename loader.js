@@ -1,107 +1,85 @@
-/* A short, skippable jacket opening. No dependency on images, WebGL or GSAP. */
+/* A tear in woven cloth is stitched shut in under two seconds. */
 (() => {
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  let active = false;
-  function openJacket(force = false) {
-    if (active || reduced.matches) return;
-    try { if (!force && sessionStorage.getItem('gh-jacket-opened')) return; } catch {}
-    active = true;
-    const opener = force ? document.activeElement : null;
-    const intro = document.createElement('div');
-    intro.className = 'jacket-intro';
-    intro.setAttribute('role', 'dialog');
-    intro.setAttribute('aria-modal', 'true');
-    intro.setAttribute('aria-label', 'Кожаная куртка расстёгивается и открывает сайт');
-    intro.innerHTML = `<svg class="jacket-scene" viewBox="0 0 1600 1000" preserveAspectRatio="none" aria-hidden="true">
-      <defs>
-        <linearGradient id="jacket-tone" x1="0" y1="0" x2="1" y2=".7"><stop stop-color="#211b18"/><stop offset=".28" stop-color="#3b3029"/><stop offset=".5" stop-color="#1b1715"/><stop offset=".75" stop-color="#49392e"/><stop offset="1" stop-color="#221c18"/></linearGradient>
-        <linearGradient id="lapel-tone" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#695345"/><stop offset=".3" stop-color="#362a23"/><stop offset=".8" stop-color="#201915"/><stop offset="1" stop-color="#44362c"/></linearGradient>
-        <linearGradient id="zip-metal"><stop stop-color="#7e6c4c"/><stop offset=".35" stop-color="#e7d3a5"/><stop offset=".65" stop-color="#baa477"/><stop offset="1" stop-color="#6a5a41"/></linearGradient>
-        <filter id="leather-grain"><feTurbulence type="fractalNoise" baseFrequency=".62" numOctaves="3" seed="8" result="noise"/><feColorMatrix in="noise" type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".23"/></feComponentTransfer><feBlend in="SourceGraphic" mode="soft-light"/></filter>
-        <clipPath id="left-jacket-clip"><path id="left-cut" d="M0 0H800V1000H0Z"/></clipPath>
-        <clipPath id="right-jacket-clip"><path id="right-cut" d="M800 0H1600V1000H800Z"/></clipPath>
-      </defs>
-      <g class="jacket-left" clip-path="url(#left-jacket-clip)">
-        <rect width="1600" height="1000" fill="url(#jacket-tone)" filter="url(#leather-grain)"/>
-        <path d="M520 -20L800 155 653 421 462 235Z" fill="url(#lapel-tone)" stroke="#77614b" stroke-width="2"/>
-        <path d="M531 0L779 160 650 399 481 231Z" fill="none" stroke="#9d866c" opacity=".55" stroke-dasharray="3 6"/>
-        <path d="M0 220L288 150 388 1000M170 515L448 660" fill="none" stroke="#0e0c0b" stroke-width="13"/>
-        <path d="M0 213L280 147 379 1000M169 505L456 655M174 529L440 673" fill="none" stroke="#9a7e61" stroke-width="1.2" stroke-dasharray="3 6" opacity=".6"/>
-        <path d="M175 515L447 660" stroke="url(#zip-metal)" stroke-width="5" stroke-dasharray="3 4"/>
-        <circle cx="650" cy="350" r="10" fill="url(#zip-metal)"/><circle cx="650" cy="350" r="5" fill="#43352a"/>
-      </g>
-      <g class="jacket-right" clip-path="url(#right-jacket-clip)">
-        <rect width="1600" height="1000" fill="url(#jacket-tone)" filter="url(#leather-grain)"/>
-        <path d="M1080 -20L800 155 947 421 1138 235Z" fill="url(#lapel-tone)" stroke="#77614b" stroke-width="2"/>
-        <path d="M1069 0L821 160 950 399 1119 231Z" fill="none" stroke="#9d866c" opacity=".55" stroke-dasharray="3 6"/>
-        <path d="M1600 220L1312 150 1212 1000M1152 660L1430 515" fill="none" stroke="#0e0c0b" stroke-width="13"/>
-        <path d="M1600 213L1320 147 1221 1000M1144 655L1431 505M1160 673L1426 529" fill="none" stroke="#9a7e61" stroke-width="1.2" stroke-dasharray="3 6" opacity=".6"/>
-        <path d="M1153 660L1425 515" stroke="url(#zip-metal)" stroke-width="5" stroke-dasharray="3 4"/>
-        <circle cx="950" cy="350" r="10" fill="url(#zip-metal)"/><circle cx="950" cy="350" r="5" fill="#43352a"/>
-      </g>
-      <g id="zip-teeth" fill="url(#zip-metal)"></g>
-      <g id="zip-pull"><rect x="781" y="-18" width="38" height="50" rx="8" fill="url(#zip-metal)" stroke="#352a20" stroke-width="2"/><path d="M787 19H813L819 85Q800 100 781 85Z" fill="url(#zip-metal)" stroke="#5c4a31" stroke-width="2"/><rect x="790" y="35" width="20" height="42" rx="7" fill="#201914"/></g>
-    </svg><div class="intro-label"><span>GH-LEATHER</span><small>ОТКРЫВАЕМ НОВУЮ ИСТОРИЮ</small></div><button class="intro-skip" type="button">Пропустить <span aria-hidden="true">↗</span></button>`;
-    document.body.appendChild(intro);
-    document.body.classList.add('intro-active');
-    const left = intro.querySelector('#left-cut');
-    const right = intro.querySelector('#right-cut');
-    const teeth = intro.querySelector('#zip-teeth');
-    const pull = intro.querySelector('#zip-pull');
-    const rows = Array.from({length: 73}, (_, i) => {
-      const l = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      const r = l.cloneNode();
-      [l,r].forEach(n=>{n.setAttribute('width','10');n.setAttribute('height','7');n.setAttribute('rx','1');teeth.append(n);});
-      return {l,r,y:i*14};
-    });
-    let frame = 0, finished = false;
-    const blocked = [];
-    function blockPage() {
-      if (finished) return;
-      document.querySelectorAll('body > header, body > main, body > footer').forEach(el=>{el.inert=true;blocked.push(el);});
-      intro.querySelector('button').focus({preventScroll:true});
-    }
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', blockPage, {once:true});
-    else blockPage();
-    function finish() {
-      if (finished) return;
-      finished = true;active=false;cancelAnimationFrame(frame);clearTimeout(safety);
-      const hadFocus=intro.contains(document.activeElement);
-      intro.remove();document.body.classList.remove('intro-active');blocked.forEach(el=>{el.inert=false;});
-      document.removeEventListener('keydown', onKey);
-      reduced.removeEventListener('change',onPreference);
-      try{sessionStorage.setItem('gh-jacket-opened','1');}catch{}
-      if(hadFocus)(opener || document.querySelector('.brand'))?.focus({preventScroll:true});
-      document.dispatchEvent(new CustomEvent('atelier:intro-finished'));
-    }
-    function onKey(e){if(e.key==='Escape')finish();if(e.key==='Tab'){e.preventDefault();intro.querySelector('button').focus();}}
-    function onPreference(){if(reduced.matches)finish();}
-    const safety=setTimeout(finish,4500);
-    document.addEventListener('keydown',onKey);reduced.addEventListener('change',onPreference);
-    intro.querySelector('button').addEventListener('click',finish);
-    const began=performance.now();
-    function tick(now) {
-      const time=now-began;
-      const p=Math.min(1,Math.max(0,(time-250)/1650));
-      const eased=p*p*(3-2*p);
-      const zipY=35+eased*1000;
-      const gap=12+Math.pow(eased,.8)*660;
-      const exit=Math.min(1,Math.max(0,(time-1750)/700));
-      left.setAttribute('d',`M0 0H${800-gap}L800 ${zipY}V1000H0Z`);
-      right.setAttribute('d',`M${800+gap} 0H1600V1000H800V${zipY}Z`);
-      rows.forEach(({l,r,y})=>{
-        const spread=y<zipY?gap*(1-y/zipY):0;
-        l.setAttribute('x',790-spread);l.setAttribute('y',y);
-        r.setAttribute('x',800+spread);r.setAttribute('y',y+5);
-      });
-      pull.setAttribute('transform',`translate(0 ${zipY-15})`);
-      intro.querySelector('.jacket-scene').style.transform=`scale(${1+exit*.12})`;
-      intro.style.opacity=String(1-Math.pow(exit,2));
-      intro.querySelector('.intro-label').style.opacity=String(Math.max(0,1-p*3));
-      if(time>=2450)finish();else frame=requestAnimationFrame(tick);
-    }
-    frame=requestAnimationFrame(tick);
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ let active=false;
+ function playIntro(force=false){
+  if(active||reduced.matches)return;
+  try{if(!force&&sessionStorage.getItem('gh-sewn-intro-v2'))return;}catch{}
+  active=true;
+  const opener=force?document.activeElement:null;
+  const intro=document.createElement('div');intro.className='sewing-intro';
+  intro.setAttribute('role','dialog');intro.setAttribute('aria-modal','true');
+  intro.setAttribute('aria-label','Игла быстро зашивает разрыв в ткани и открывает сайт');
+  intro.innerHTML=`<div class="cloth-grain" aria-hidden="true"></div>
+   <div class="sewing-brand" aria-hidden="true"><span>gh</span>GH-LEATHER<small>АТЕЛЬЕ БЕРЕЖНЫХ ПЕРЕМЕН</small></div>
+   <svg class="sewing-scene" viewBox="0 0 1000 600" aria-hidden="true">
+    <defs>
+     <linearGradient id="tear-depth" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#15120e"/><stop offset=".55" stop-color="#2b241b"/><stop offset="1" stop-color="#443a2b"/></linearGradient>
+     <linearGradient id="needle-steel" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#433e35"/><stop offset=".35" stop-color="#faf7ee"/><stop offset=".65" stop-color="#a39d8e"/><stop offset="1" stop-color="#3e3b34"/></linearGradient>
+     <filter id="thread-shadow" x="-30%" y="-50%" width="160%" height="200%"><feDropShadow dx="0" dy="1.5" stdDeviation="1" flood-color="#302116" flood-opacity=".45"/></filter>
+    </defs>
+    <g class="cloth-wrinkles" fill="none" stroke-linecap="round">
+     <path d="M100 170Q290 207 370 285M900 170Q710 207 630 285M130 440Q300 379 375 320M870 440Q700 379 625 320" stroke="#5b4c3910" stroke-width="15"/>
+     <path d="M100 160Q290 197 370 280M900 160Q710 197 630 280M130 432Q300 372 375 315M870 432Q700 372 625 315" stroke="#fff8e522" stroke-width="6"/>
+    </g>
+    <path id="cloth-hole-shadow" fill="#3d2e1c" opacity=".15"/>
+    <path id="cloth-hole" fill="url(#tear-depth)"/>
+    <path id="cloth-upper-edge" fill="none" stroke="#e0d3bb" stroke-width="3"/>
+    <path id="cloth-lower-edge" fill="none" stroke="#66563f" stroke-width="2" opacity=".55"/>
+    <g id="cloth-frays" stroke="#d4c5a8" fill="none" stroke-width="1"/>
+    <g id="cloth-stitches" fill="none" stroke="#713e3b" stroke-width="2.5" stroke-linecap="round" filter="url(#thread-shadow)"/>
+    <path id="working-thread" fill="none" stroke="#713e3b" stroke-width="1.8" stroke-linecap="round"/>
+    <g id="sewing-needle"><path d="M-66 -3Q-77 0-66 3L45 2L66 0L45-2Z" fill="url(#needle-steel)" stroke="#625d50" stroke-width=".5"/><ellipse cx="-62" cy="0" rx="5" ry="1.1" fill="#8c7c62"/></g>
+   </svg>
+   <div class="sewing-caption"><span>Любимым вещам — новая история.</span><small>СОХРАНЯЕМ ТО, ЧТО ВЫ ЛЮБИТЕ</small></div>
+   <button class="intro-skip" type="button">Пропустить <span aria-hidden="true">↗</span></button>`;
+  document.body.appendChild(intro);document.body.classList.add('intro-active');
+  const svgNS='http://www.w3.org/2000/svg';
+  const hole=intro.querySelector('#cloth-hole'),shadow=intro.querySelector('#cloth-hole-shadow');
+  const upper=intro.querySelector('#cloth-upper-edge'),lower=intro.querySelector('#cloth-lower-edge');
+  const needle=intro.querySelector('#sewing-needle'),workingThread=intro.querySelector('#working-thread');
+  const stitches=Array.from({length:22},(_,i)=>{const path=document.createElementNS(svgNS,'path');intro.querySelector('#cloth-stitches').append(path);return{path,x:235+i*25};});
+  const frays=Array.from({length:54},(_,i)=>{const path=document.createElementNS(svgNS,'path');intro.querySelector('#cloth-frays').append(path);return{path,x:233+(i%27)*20,side:i<27?-1:1,index:i};});
+  const baseline=x=>300+Math.sin((x-225)*.017)*5+Math.sin(x*.055)*1.4;
+  const span=x=>Math.pow(Math.max(0,Math.sin((x-225)/550*Math.PI)),.65);
+  function halfGap(x,sewnX){const closing=Math.max(0,Math.min(1,(x-sewnX+16)/45));return span(x)*(1.5+closing*(37+Math.sin(x*.091)*5+Math.sin(x*.21)*2));}
+  let frame=0,finished=false;const blocked=[];
+  function blockPage(){if(finished)return;document.querySelectorAll('body > header, body > main, body > footer, body > .skip').forEach(el=>{el.inert=true;blocked.push(el);});intro.querySelector('button').focus({preventScroll:true});}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',blockPage,{once:true});else blockPage();
+  function finish(){
+   if(finished)return;finished=true;active=false;cancelAnimationFrame(frame);clearTimeout(safety);
+   const hadFocus=intro.contains(document.activeElement);
+   intro.remove();document.body.classList.remove('intro-active');blocked.forEach(el=>{el.inert=false;});
+   document.removeEventListener('keydown',onKey);reduced.removeEventListener('change',onPreference);
+   try{sessionStorage.setItem('gh-sewn-intro-v2','1');}catch{}
+   if(hadFocus)(opener||document.querySelector('.brand'))?.focus({preventScroll:true});
+   document.dispatchEvent(new CustomEvent('atelier:intro-finished'));
   }
-  window.openAtelierJacket=()=>openJacket(true);
-  openJacket();
+  function onKey(e){if(e.key==='Escape')finish();if(e.key==='Tab'){e.preventDefault();intro.querySelector('button').focus();}}
+  function onPreference(){if(reduced.matches)finish();}
+  const safety=setTimeout(finish,3500);
+  document.addEventListener('keydown',onKey);reduced.addEventListener('change',onPreference);
+  intro.querySelector('button').addEventListener('click',finish);
+  const began=performance.now();
+  function tick(now){
+   const time=now-began,progress=Math.max(0,Math.min(1,(time-180)/1160)),sewnX=215+progress*590;
+   const top=[],bottom=[];
+   for(let i=0;i<=70;i++){const x=225+i/70*550,y=baseline(x),gap=halfGap(x,sewnX);top.push(`${x.toFixed(1)} ${(y-gap).toFixed(1)}`);bottom.push(`${x.toFixed(1)} ${(y+gap).toFixed(1)}`);}
+   const d=`M${top.join('L')}L${bottom.slice().reverse().join('L')}Z`;
+   hole.setAttribute('d',d);shadow.setAttribute('d',d);shadow.setAttribute('transform','translate(0 4)');
+   upper.setAttribute('d',`M${top.join('L')}`);lower.setAttribute('d',`M${bottom.join('L')}`);
+   frays.forEach(({path,x,side,index})=>{const y=baseline(x)+side*halfGap(x,sewnX),length=5+(index%5)*1.6;path.setAttribute('d',`M${x} ${y}q${index%2?5:-5} ${side*-3} ${index%2?3:-3} ${-side*length}`);path.style.opacity=String(Math.max(.12,Math.min(.8,(x-sewnX)/60)));});
+   stitches.forEach(({path,x})=>{const completion=Math.max(0,Math.min(1,(sewnX-x)/25)),y=baseline(x),height=6+(1-completion)*11;path.setAttribute('d',`M${x-5} ${y-height}Q${x+4} ${y-1} ${x+7} ${y+height}`);path.style.opacity=String(completion);});
+   const phase=progress*22*Math.PI*2,nx=Math.max(225,Math.min(775,sewnX+12)),ny=baseline(nx)+Math.sin(phase)*14;
+   needle.setAttribute('transform',`translate(${nx} ${ny}) rotate(${-25+Math.cos(phase)*35})`);needle.style.opacity=String(Math.min(1,(1-progress)*8));
+   const lastX=Math.max(225,nx-36),lastY=baseline(lastX);
+   workingThread.setAttribute('d',`M${lastX} ${lastY-6}Q${nx-70} ${ny-48} ${nx-54} ${ny+20}`);workingThread.style.opacity=needle.style.opacity;
+   const exit=Math.max(0,Math.min(1,(time-1510)/360));intro.style.opacity=String(1-exit*exit);
+   intro.querySelector('.sewing-scene').style.transform=`translate(-50%,-50%) scale(${1+exit*.06})`;
+   if(time>=1870)finish();else frame=requestAnimationFrame(tick);
+  }
+  frame=requestAnimationFrame(tick);
+ }
+ window.playAtelierIntro=()=>playIntro(true);
+ playIntro();
 })();
