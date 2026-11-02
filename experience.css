@@ -22,3 +22,49 @@
 .sewing-intro .intro-skip:focus-visible{outline-color:#5b332d}
 .studio-controls>#model-name{margin-top:25px}
 @media(max-width:600px){.sewing-scene{width:140%;max-width:none;top:49%}.sewing-brand{top:15%;font-size:12px}.sewing-brand>span{font-size:46px}.sewing-brand>small{font-size:6px}.sewing-caption{bottom:19%;gap:12px}.sewing-caption>span{font-size:23px}.sewing-caption>small{font-size:6px;letter-spacing:.15em}}
+
+/* Service shortcuts read like small atelier labels; the arrow moves on hover. */
+.service-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(150px,1fr));gap:9px;width:min(100%,470px);margin:0 0 30px}
+.service-shortcuts a{position:relative;display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:48px;padding:0 15px;border:1px solid #bfb7aa;background:#f8f5ef80;font:15px/1.2 var(--serif);transition:color .24s,border-color .24s,background .24s,transform .24s,box-shadow .24s;overflow:hidden}
+.service-shortcuts a:before{content:'';position:absolute;inset:0;background:var(--wine);transform:translateY(102%);transition:transform .32s cubic-bezier(.2,.7,.2,1);z-index:0}
+.service-shortcuts a span,.service-shortcuts a{isolation:isolate}
+.service-shortcuts a span{font:18px/1 var(--sans);transition:transform .24s;color:var(--wine)}
+.service-shortcuts a:hover,.service-shortcuts a:focus-visible{color:var(--paper);border-color:var(--wine);transform:translateY(-2px);box-shadow:0 7px 18px #29282216}
+.service-shortcuts a:hover:before,.service-shortcuts a:focus-visible:before{transform:translateY(0)}
+.service-shortcuts a:hover span,.service-shortcuts a:focus-visible span{color:var(--paper);transform:translate(3px,-3px)}
+.service{scroll-margin-top:110px}
+.service[open] summary h3{color:var(--wine)}
+.service summary{transition:padding .3s,color .3s}
+.service[open] summary{padding-left:0}
+.service summary:focus-visible{outline-offset:2px}
+.service-body{transform-origin:top}
+.service-body a{transition:gap .22s,color .22s}
+.service-body a:hover{gap:34px;color:#4e2827}
+.hero-desc{max-width:440px}
+@media(max-width:600px){.service-shortcuts{width:100%;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-bottom:25px}.service-shortcuts a{min-height:46px;padding:0 12px;font-size:14px}.hero-bottom{font-size:8px;letter-spacing:.04em}.service{scroll-margin-top:70px}}
+@media(prefers-reduced-motion:reduce){.service-shortcuts a,.service-shortcuts a:before,.service-shortcuts a span,.service summary,.service-body a{transition:none}}
+
+.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.hero-model{height:auto;min-height:0;display:flex}
+.hero-model .studio-stage{flex:1;min-height:570px;height:100%;border:1px solid #d8d0c3;background:radial-gradient(ellipse at 50% 28%,#faf7f0,#ded4c6);}
+.hero-model .studio-stage canvas{z-index:1}
+.hero-model .model-poster{width:100%;max-height:500px}
+.hero-model .studio-watermark{top:18px;left:23px;color:#763e3c55;z-index:2}
+.hero-model .studio-hint{left:22px;right:auto;bottom:190px;text-align:left;font-size:9px;background:#f4f0e8bf;padding:6px 10px;z-index:2}
+.hero-model-panel{position:absolute;z-index:3;left:17px;right:17px;bottom:17px;padding:13px 15px 10px;background:#f4f0e8e8;border:1px solid #d5ccbd;box-shadow:0 10px 32px #38282015;backdrop-filter:blur(8px)}
+.hero-model-top{display:flex;justify-content:space-between;gap:14px;font-size:7px;letter-spacing:.13em;color:var(--muted)}
+.hero-model-tools{display:grid;grid-template-columns:auto auto minmax(90px,1fr);align-items:center;gap:14px;margin-top:8px}
+.hero-model .model-colors{gap:5px;margin:0}
+.hero-model .model-colors button{width:34px;height:34px;padding:0}
+.hero-model .model-colors button:before{inset:4px}
+.hero-model .model-actions{gap:5px;margin:0;flex-wrap:nowrap}
+.hero-model .model-actions button{min-height:36px;min-width:36px;padding:5px 9px;background:#f4f0e8;border-color:#d0c8bc;font-size:10px}
+.hero-model .model-actions button[data-turn]{font-size:19px;padding:3px}
+.hero-model .model-actions button:hover{background:white}
+.hero-model .model-zoom{gap:7px;width:auto;margin:0;font-size:8px}
+.hero-model .model-zoom input{width:74px;height:25px;flex:1}
+.hero-model figcaption{font-size:8px;letter-spacing:.06em}
+@media(max-width:1000px){.hero-model .studio-stage{min-height:520px}.hero-model-tools{grid-template-columns:auto 1fr;gap:10px}.hero-model .model-zoom{grid-column:1/-1;justify-self:end;width:180px}.hero-model .studio-hint{bottom:168px}}
+@media(max-width:600px){.hero h1{margin-top:20px}.hero-desc{margin-top:16px;margin-bottom:18px}.hero-bottom{margin-top:22px}.hero-model{height:340px;width:100%}.hero-model .studio-stage{min-height:320px}.hero-model-panel{left:10px;right:10px;bottom:10px;padding:10px}.hero-model-top{font-size:6px}.hero-model-tools{grid-template-columns:auto 1fr;gap:8px}.hero-model .model-colors button{width:31px;height:31px}.hero-model .model-actions{justify-content:flex-end}.hero-model .model-actions button{min-width:33px;min-height:34px;padding:4px 7px}.hero-model .model-zoom{width:100%;justify-self:stretch}.hero-model .model-zoom input{width:auto}.hero-model .studio-watermark{font-size:46px;left:15px;top:10px}.hero-model .studio-hint{bottom:145px;left:12px;font-size:8px;padding:5px 7px}}
+.service summary{gap:15px;margin-left:-22px;margin-right:22px}
+@media(prefers-reduced-motion:reduce){.hero-model-panel{backdrop-filter:none}}

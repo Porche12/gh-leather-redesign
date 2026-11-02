@@ -1,7 +1,7 @@
 /* Original procedural leather studies, not representations of actual orders. */
 const stage = document.querySelector('#model-stage');
 const hint = document.querySelector('#model-hint');
-document.querySelector('.replay-intro').addEventListener('click', () => window.playAtelierIntro?.());
+document.querySelector('.replay-intro')?.addEventListener('click', () => window.playAtelierIntro?.());
 let started = false;
 async function startStudio() {
   if (started) return;
@@ -12,7 +12,7 @@ async function startStudio() {
   } catch (error) {
     stage.setAttribute('aria-busy', 'false');
     hint.textContent = 'Объёмный эскиз недоступен в этом браузере. Иллюстрация сохранена.';
-    document.querySelectorAll('.studio-controls button:not(.replay-intro), .model-zoom input').forEach(el => {el.disabled=true;});
+    document.querySelectorAll('#model-stage button, #model-stage input').forEach(el => {el.disabled=true;});
     console.info('GH-Leather: static illustration enabled.', error.message);
   }
 }
@@ -34,7 +34,7 @@ function buildStudio(T) {
   canvas.setAttribute('aria-describedby','model-hint');
   const scene=new T.Scene();
   const camera=new T.PerspectiveCamera(33,1,.1,100);
-  camera.position.set(0,.25,5.7);
+  camera.position.set(0,.25,4.9);
   camera.lookAt(0,.02,0);
   scene.add(new T.HemisphereLight(0xfff4e2,0x6d5a49,2.1));
   function light(color,intensity,x,y,z){const l=new T.DirectionalLight(color,intensity);l.position.set(x,y,z);scene.add(l);}
@@ -42,16 +42,22 @@ function buildStudio(T) {
   light(0xffffff,2,3,1,-2);
   light(0xe5edf3,.8,0,0,4);
 
-  // A deterministic, neutral leather-grain texture: no external texture requests.
+  // Fine pebble grain with soft highlights and pores, generated locally so the
+  // model stays self-contained and the selected leather colour remains editable.
   const leatherCanvas=document.createElement('canvas');leatherCanvas.width=leatherCanvas.height=512;
   const ctx=leatherCanvas.getContext('2d');const pixels=ctx.createImageData(512,512);
   let seed=1937;const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
-  for(let i=0;i<pixels.data.length;i+=4){const v=168+Math.floor(random()*48);pixels.data[i]=pixels.data[i+1]=pixels.data[i+2]=v;pixels.data[i+3]=255;}
-  ctx.putImageData(pixels,0,0);ctx.strokeStyle='#716b642a';ctx.lineWidth=.7;
-  for(let i=0;i<1800;i++){const x=random()*512,y=random()*512;ctx.beginPath();ctx.moveTo(x,y);ctx.quadraticCurveTo(x+random()*8-4,y+4,x+random()*12-6,y+10);ctx.stroke();}
-  const grain=new T.CanvasTexture(leatherCanvas);grain.wrapS=grain.wrapT=T.RepeatWrapping;grain.repeat.set(3,3);
+  for(let i=0;i<pixels.data.length;i+=4){const v=218+Math.floor(random()*24);pixels.data[i]=pixels.data[i+1]=pixels.data[i+2]=v;pixels.data[i+3]=255;}
+  ctx.putImageData(pixels,0,0);
+  for(let i=0;i<2300;i++){
+    const x=random()*512,y=random()*512,rx=1.1+random()*2.6,ry=1+random()*2.1;
+    const glint=ctx.createRadialGradient(x-rx*.3,y-ry*.35,.1,x,y,Math.max(rx,ry));
+    glint.addColorStop(0,'rgba(255,249,232,.22)');glint.addColorStop(.56,'rgba(235,220,198,.035)');glint.addColorStop(1,'rgba(30,19,12,.18)');
+    ctx.fillStyle=glint;ctx.beginPath();ctx.ellipse(x,y,rx,ry,random()*Math.PI,0,Math.PI*2);ctx.fill();
+  }
+  const grain=new T.CanvasTexture(leatherCanvas);grain.colorSpace=T.SRGBColorSpace;grain.wrapS=grain.wrapT=T.RepeatWrapping;grain.repeat.set(2.5,2.5);grain.anisotropy=4;
   const leatherMaterials=[];
-  function leather(){const material=new T.MeshPhysicalMaterial({color:0x382820,roughness:.48,metalness:.02,clearcoat:.22,clearcoatRoughness:.48,bumpMap:grain,bumpScale:.018,roughnessMap:grain});leatherMaterials.push(material);return material;}
+  function leather(){const material=new T.MeshPhysicalMaterial({color:0x493326,map:grain,roughness:.4,metalness:0,clearcoat:.16,clearcoatRoughness:.3,bumpMap:grain,bumpScale:.012,roughnessMap:grain});leatherMaterials.push(material);return material;}
   const skin=leather();
   const metal=new T.MeshStandardMaterial({color:0xc7b18b,metalness:.86,roughness:.27});
   const thread=new T.LineDashedMaterial({color:0xb49a77,dashSize:.014,gapSize:.009,transparent:true,opacity:.68});
@@ -64,8 +70,18 @@ function buildStudio(T) {
   function roundedShape(x,y,w,h,r){
     const s=new T.Shape();s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);return s;
   }
-  function extrude(group,shape,depth,mat,z=0,bevel=.04){
+  function extrude(group,shape,depth,mat,z=0,bevel=.04,bulge=0){
     const g=new T.ExtrudeGeometry(shape,{depth,steps:1,bevelEnabled:true,bevelSegments:8,bevelSize:bevel,bevelThickness:bevel,curveSegments:24});
+    if(bulge){
+      g.computeBoundingBox();const bounds=g.boundingBox,positions=g.getAttribute('position');
+      const cx=(bounds.min.x+bounds.max.x)/2,cy=(bounds.min.y+bounds.max.y)/2,rx=(bounds.max.x-bounds.min.x)/2,ry=(bounds.max.y-bounds.min.y)/2;
+      for(let i=0;i<positions.count;i++){
+        const x=(positions.getX(i)-cx)/rx,y=(positions.getY(i)-cy)/ry,front=T.MathUtils.smoothstep(positions.getZ(i),depth*.42,depth+bevel);
+        const cushion=Math.pow(Math.max(0,1-x*x),.75)*Math.pow(Math.max(0,1-y*y),.8);
+        positions.setZ(i,positions.getZ(i)+bulge*cushion*front);
+      }
+      g.computeVertexNormals();
+    }
     // Extruded bevels share positions but not vertices. Average their normals to
     // give leather a soft rolled edge rather than a machined, faceted profile.
     const positions=g.getAttribute('position'),normals=g.getAttribute('normal'),sums=new Map();
@@ -77,6 +93,22 @@ function buildStudio(T) {
   }
   function pathShape(points){const s=new T.Shape();s.moveTo(...points[0]);points.slice(1).forEach(p=>s.lineTo(...p));s.closePath();return s;}
   function tube(group,points,r,mat){const curve=new T.CatmullRomCurve3(points.map(p=>new T.Vector3(...p)));return mesh(group,new T.TubeGeometry(curve,40,r,10,false),mat);}
+  const stitchMaterial=new T.MeshStandardMaterial({color:0xcab99c,roughness:.88});
+  const stitchGeometry=new T.CylinderGeometry(.003,.003,.032,5);
+  const stitchAxis=new T.Vector3(0,1,0);
+  function stitchLine(group,points,count,z){
+    const curve=new T.CatmullRomCurve3(points.map(p=>new T.Vector3(...p)),true,'centripetal');
+    const instances=new T.InstancedMesh(stitchGeometry,stitchMaterial,count);
+    const dummy=new T.Object3D();
+    for(let i=0;i<count;i++){
+      const t=(i+.5)/count,p=curve.getPoint(t),tan=curve.getTangent(t);
+      const cross=new T.Vector3(-tan.y,tan.x,0).normalize();
+      const from=p.clone().addScaledVector(cross,-.012),to=p.clone().addScaledVector(cross,.012);
+      from.z=z;to.z=z;dummy.position.copy(from).add(to).multiplyScalar(.5);
+      const direction=to.clone().sub(from).normalize();dummy.quaternion.setFromUnitVectors(stitchAxis,direction);dummy.scale.set(1,1,.72);dummy.updateMatrix();instances.setMatrixAt(i,dummy.matrix);
+    }
+    instances.instanceMatrix.needsUpdate=true;group.add(instances);
+  }
   function ring(group,x,y,z,w,h){
     const outer=roundedShape(-w/2,-h/2,w,h,.025);
     const hole=new T.Path();const hw=w/2-.018,hh=h/2-.018;hole.moveTo(-hw,-hh);hole.lineTo(-hw,hh);hole.lineTo(hw,hh);hole.lineTo(hw,-hh);hole.closePath();outer.holes.push(hole);
@@ -85,9 +117,9 @@ function buildStudio(T) {
 
   function bag() {
     const g=new T.Group();
-    extrude(g,roundedShape(-.76,-.66,1.52,1.14,.16),.53,skin,-.27,.085);
+    extrude(g,roundedShape(-.76,-.66,1.52,1.14,.16),.53,skin,-.27,.085,.105);
     const flap=pathShape([[-.72,.47],[.72,.47],[.69,-.02],[.54,-.19],[-.54,-.19],[-.69,-.02]]);
-    extrude(g,flap,.045,skin,.36,.035);
+    extrude(g,flap,.045,skin,.36,.035,.045);
     // Rounded side gussets and piping.
     for(const sign of [-1,1]){
       tube(g,[[sign*.66,-.60,.30],[sign*.74,-.48,.30],[sign*.76,.15,.30],[sign*.65,.43,.30]],.014,skin);
@@ -105,9 +137,14 @@ function buildStudio(T) {
     }
     seam(g,[[-.68,.39,.42],[.68,.39,.42],[.65,.00,.42],[.51,-.14,.42],[-.51,-.14,.42],[-.65,.00,.42]],true);
     seam(g,[[-.62,-.56,.36],[.62,-.56,.36]]);
+    stitchLine(g,[[-.66,.41],[.66,.41],[.63,.01],[.50,-.12],[-.50,-.12],[-.63,.01]],58,.467);
+    stitchLine(g,[[-.65,-.55],[.65,-.55],[.69,.38],[-.69,.38]],72,.385);
+    // Soft folds where the padded front panel meets the side gussets.
+    tube(g,[[-.67,.25,.43],[-.60,.18,.465],[-.53,.10,.475]],.004,skin);
+    tube(g,[[.67,.25,.43],[.60,.18,.465],[.53,.10,.475]],.004,skin);
     // Small maker's plaque is a material detail, not an invented product brand.
     box(g,.20,.07,.016,metal,0,.20,.425);
-    g.position.y=-.18;
+    g.position.y=.08;
     return g;
   }
 
@@ -120,7 +157,7 @@ function buildStudio(T) {
   let yaw=-.28,pitch=.035,scale=1,visible=true,frame=0;
   function draw(){frame=0;if(document.hidden||!visible)return;display.rotation.set(pitch,yaw,0);display.scale.setScalar(scale);renderer.render(scene,camera);}
   function requestDraw(){if(!frame&&!document.hidden&&visible)frame=requestAnimationFrame(draw);}
-  function resize(){const r=stage.getBoundingClientRect();if(r.width<1)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.position.z=camera.aspect<.85?7:5.7;camera.updateProjectionMatrix();requestDraw();}
+  function resize(){const r=stage.getBoundingClientRect();if(r.width<1)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.position.z=innerWidth<600?6.1:4.9;camera.updateProjectionMatrix();requestDraw();}
   new ResizeObserver(resize).observe(stage);
   new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible)requestDraw();else{cancelAnimationFrame(frame);frame=0;}},{threshold:0}).observe(stage);
   document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0;}else requestDraw();});

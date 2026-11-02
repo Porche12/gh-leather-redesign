@@ -1,8 +1,8 @@
 /* Core content and navigation remain available without JavaScript. */
 const materialData = {
- leather: {note:'Одежда, сумки, обувь и аксессуары. А ещё — кожаная мебель и салоны автомобилей.',tailor:'Куртка, сумка, обувь или комплект аксессуаров — по вашей идее, из натуральной кожи. Возможен пошив из вашего материала.',restore:'Ремонт и восстановление кожаных изделий: одежды, сумок, обуви, мебели и автомобильных салонов. Покажите вещь мастеру, чтобы обсудить возможности.',alter:'Перекрой кожаной одежды, переделка сумок и аксессуаров. Обсудим новую форму и детали, сохранив характер материала.',finish:'Покраска кожаной одежды, обуви, сумок, мебели и автомобильных салонов. Подбор цвета и объём работ обсуждаются индивидуально.',title:'Покраска и уход'},
- fur: {note:'Шубы, дублёнки и меховые жилеты. Пошив, восстановление и новый взгляд на привычный силуэт.',tailor:'Индивидуальный пошив шуб, меховых жилетов и дублёнок. Идею, материал и особенности будущего изделия обсудите с мастером.',restore:'Ремонт и реставрация меховых изделий. Возможность восстановления зависит от состояния вещи — сначала покажите её мастеру.',alter:'Перекрой и переделка меховой одежды. Изменение фасона и посадки обсуждается после знакомства с изделием.',finish:'Покраска и чистка меховых изделий. Возможность обработки и подходящий способ уточняются индивидуально.',title:'Покраска и чистка'},
- textile: {note:'Одежда для повседневности и особых случаев. Пошив, подгонка по фигуре и ремонт.',tailor:'Индивидуальный пошив мужской, женской и детской одежды, платьев, костюмов и верхней одежды. Можно прийти со своим материалом.',restore:'Ремонт одежды и трикотажа, художественная штопка, замена молний. Расскажите о повреждении, чтобы уточнить возможный способ ремонта.',alter:'Подгонка по фигуре, изменение фасона и полный перекрой, в том числе свадебных, вечерних и выпускных платьев.',finish:'В ателье также можно обратиться за чисткой подушек и ремонтом швейных машин. Подробности и условия уточните у мастера.',title:'Дополнительные услуги'}
+ leather: {note:'Одежда · сумки · обувь · мебель',tailor:'Пошив одежды и аксессуаров по вашей идее.',restore:'Ремонт и восстановление кожи и аксессуаров.',alter:'Новый фасон и посадка по фигуре.',finish:'Обновление цвета кожи и аксессуаров.',title:'Покраска и уход'},
+ fur: {note:'Шубы · дублёнки · меховые жилеты',tailor:'Пошив меховой одежды на заказ.',restore:'Ремонт и восстановление меховых изделий.',alter:'Изменение фасона и посадки меховой одежды.',finish:'Покраска и чистка меха. Детали уточните у мастера.',title:'Покраска и чистка'},
+ textile: {note:'Одежда · платья · домашний текстиль',tailor:'Пошив одежды по вашим меркам и идее.',restore:'Ремонт одежды, трикотажа и замена молний.',alter:'Подгонка, изменение фасона и перекрой.',finish:'Чистка подушек и ремонт швейных машин.',title:'Дополнительные услуги'}
 };
 const materialButtons = [...document.querySelectorAll('[data-material]')];
 materialButtons.forEach(button => button.addEventListener('click', () => {
@@ -11,6 +11,23 @@ materialButtons.forEach(button => button.addEventListener('click', () => {
  document.querySelector('#material-note').textContent=data.note;
  ['tailor','restore','alter','finish'].forEach(key => document.querySelector('#copy-'+key).textContent=data[key]);
  document.querySelector('#finish-title').textContent=data.title;
+}));
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function animateService(service){
+ const body=service.querySelector('.service-body');
+ if(!body || reducedMotion || !Element.prototype.animate)return;
+ body.animate([{opacity:0,transform:'translateY(-8px)',clipPath:'inset(0 0 100% 0)'},{opacity:1,transform:'translateY(0)',clipPath:'inset(0 0 0 0)'}],{duration:420,easing:'cubic-bezier(.2,.7,.2,1)'});
+}
+document.querySelectorAll('.service').forEach(service=>service.addEventListener('toggle',()=>{if(service.open)animateService(service);}));
+document.querySelectorAll('.service-shortcuts a').forEach(link=>link.addEventListener('click',event=>{
+ const service=document.querySelector(link.getAttribute('href'));
+ if(!service)return;
+ event.preventDefault();
+ document.querySelectorAll('.service').forEach(item=>{if(item!==service)item.open=false;});
+ service.open=true;
+ history.pushState(null,'',link.getAttribute('href'));
+ service.scrollIntoView({behavior:reducedMotion?'instant':'smooth',block:'center'});
+ service.querySelector('summary').focus({preventScroll:true});
 }));
 const menu=document.querySelector('.mobile-menu');
 menu.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{menu.open=false;}));
@@ -42,7 +59,7 @@ if(window.gsap && window.ScrollTrigger){
  const motion=gsap.matchMedia();
  motion.add('(prefers-reduced-motion: no-preference)',()=>{
   const revealHero=()=>{
-   gsap.from('.hero-copy > .eyebrow, .hero h1, .hero-desc, .hero-copy > .button',{y:18,opacity:0,duration:.8,stagger:.1,ease:'power2.out',clearProps:'all'});
+   gsap.from('.hero-copy > .eyebrow, .hero h1, .hero-desc, .service-shortcuts a',{y:18,opacity:0,duration:.75,stagger:.08,ease:'power2.out',clearProps:'all'});
    gsap.from('.hero-visual',{opacity:0,y:22,duration:1,ease:'power2.out',clearProps:'all'});
   };
   if(document.querySelector('.sewing-intro'))document.addEventListener('atelier:intro-finished',revealHero,{once:true});
@@ -50,6 +67,7 @@ if(window.gsap && window.ScrollTrigger){
   document.querySelectorAll('.section-heading, .works-heading, .approach h2, .faq-section h2, .contact-top').forEach(element=>{
    gsap.from(element,{y:24,duration:.75,ease:'power2.out',clearProps:'all',scrollTrigger:{trigger:element,start:'top 92%',once:true}});
   });
+  gsap.from('.service summary',{x:22,opacity:0,duration:.65,stagger:.09,ease:'power2.out',clearProps:'all',scrollTrigger:{trigger:'.service-list',start:'top 88%',once:true}});
   return ()=>document.removeEventListener('atelier:intro-finished',revealHero);
  });
 }
