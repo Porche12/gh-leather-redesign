@@ -24,7 +24,7 @@ function showPhoto(index){
  const image=document.querySelector('#gallery-image');
  image.src=photos[photoIndex].getAttribute('href');image.alt=photos[photoIndex].querySelector('img').alt;
  document.querySelector('#gallery-caption').textContent=titles[photoIndex];
- document.querySelector('#gallery-counter').textContent=String(photoIndex+1).padStart(2,'0')+' / 03';
+ document.querySelector('#gallery-counter').textContent='Галерея ателье';
 }
 photos.forEach((link,index)=>link.addEventListener('click',event=>{
  if(typeof gallery.showModal!=='function')return;
@@ -41,10 +41,15 @@ if(window.gsap && window.ScrollTrigger){
  gsap.registerPlugin(ScrollTrigger);
  const motion=gsap.matchMedia();
  motion.add('(prefers-reduced-motion: no-preference)',()=>{
-  gsap.from('.hero-copy > .eyebrow, .hero h1, .hero-desc, .hero-copy > .button',{y:18,opacity:0,duration:.8,stagger:.1,ease:'power2.out',clearProps:'all'});
-  gsap.from('.hero-visual',{opacity:0,y:22,duration:1,ease:'power2.out',clearProps:'all'});
+  const revealHero=()=>{
+   gsap.from('.hero-copy > .eyebrow, .hero h1, .hero-desc, .hero-copy > .button',{y:18,opacity:0,duration:.8,stagger:.1,ease:'power2.out',clearProps:'all'});
+   gsap.from('.hero-visual',{opacity:0,y:22,duration:1,ease:'power2.out',clearProps:'all'});
+  };
+  if(document.querySelector('.jacket-intro'))document.addEventListener('atelier:intro-finished',revealHero,{once:true});
+  else revealHero();
   document.querySelectorAll('.section-heading, .works-heading, .approach h2, .faq-section h2, .contact-top').forEach(element=>{
    gsap.from(element,{y:24,duration:.75,ease:'power2.out',clearProps:'all',scrollTrigger:{trigger:element,start:'top 92%',once:true}});
   });
+  return ()=>document.removeEventListener('atelier:intro-finished',revealHero);
  });
 }
