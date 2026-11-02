@@ -57,7 +57,7 @@ function buildStudio(T) {
   }
   const grain=new T.CanvasTexture(leatherCanvas);grain.colorSpace=T.SRGBColorSpace;grain.wrapS=grain.wrapT=T.RepeatWrapping;grain.repeat.set(2.5,2.5);grain.anisotropy=4;
   const leatherMaterials=[];
-  function leather(){const material=new T.MeshPhysicalMaterial({color:0x493326,map:grain,roughness:.4,metalness:0,clearcoat:.16,clearcoatRoughness:.3,bumpMap:grain,bumpScale:.012,roughnessMap:grain});leatherMaterials.push(material);return material;}
+  function leather(){const material=new T.MeshPhysicalMaterial({color:0x493326,map:grain,roughness:.52,metalness:0,clearcoat:.09,clearcoatRoughness:.42,bumpMap:grain,bumpScale:.016,roughnessMap:grain});leatherMaterials.push(material);return material;}
   const skin=leather();
   const metal=new T.MeshStandardMaterial({color:0xc7b18b,metalness:.86,roughness:.27});
   const thread=new T.LineDashedMaterial({color:0xb49a77,dashSize:.014,gapSize:.009,transparent:true,opacity:.68});
@@ -157,7 +157,7 @@ function buildStudio(T) {
   let yaw=-.28,pitch=.035,scale=1,visible=true,frame=0;
   function draw(){frame=0;if(document.hidden||!visible)return;display.rotation.set(pitch,yaw,0);display.scale.setScalar(scale);renderer.render(scene,camera);}
   function requestDraw(){if(!frame&&!document.hidden&&visible)frame=requestAnimationFrame(draw);}
-  function resize(){const r=stage.getBoundingClientRect();if(r.width<1)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.position.z=innerWidth<600?6.1:4.9;camera.updateProjectionMatrix();requestDraw();}
+  function resize(){const r=stage.getBoundingClientRect();if(r.width<1)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.position.z=innerWidth<600?6.1:(camera.aspect<.8?5.8:4.9);camera.updateProjectionMatrix();requestDraw();}
   new ResizeObserver(resize).observe(stage);
   new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible)requestDraw();else{cancelAnimationFrame(frame);frame=0;}},{threshold:0}).observe(stage);
   document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0;}else requestDraw();});
