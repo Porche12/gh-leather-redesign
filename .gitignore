@@ -1,0 +1,11 @@
+# Local machine paths and credentials
+TOOLKIT.txt
+.env
+.env.*
+!.env.example
+.openai/
+node_modules/
+__pycache__/
+*.log
+.DS_Store
+Thumbs.db

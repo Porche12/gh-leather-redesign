@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f4f0e8">
+<title>GH-Leather — ателье кожи, меха и ткани в Волгограде</title>
+<meta name="description" content="Индивидуальный пошив, ремонт, реставрация и покраска одежды, сумок и аксессуаров. GH-Leather: Волгоград, ул. Ангарская, 114.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
+<script defer src="assets/lib/gsap.min.js"></script><script defer src="assets/lib/ScrollTrigger.min.js"></script><script defer src="app.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Перейти к содержимому</a>
+<header class="header wrap">
+  <a class="brand" href="#top" aria-label="GH-Leather — на главную"><span class="brand-icon" aria-hidden="true">gh<span>✳</span></span><span>GH-LEATHER<small>САЛОН · АТЕЛЬЕ</small></span></a>
+  <nav class="desktop-nav" aria-label="Основная навигация"><a href="#services">Услуги</a><a href="#works">Работы</a><a href="#approach">Об ателье</a><a href="#contacts">Контакты</a></nav>
+  <a class="header-phone" href="tel:+78442503299">+7 (8442) 50-32-99 <span aria-hidden="true">↗</span></a>
+  <details class="mobile-menu"><summary aria-label="Открыть меню">Меню <span aria-hidden="true">☰</span></summary><nav aria-label="Мобильная навигация"><a href="#services">Услуги</a><a href="#works">Работы</a><a href="#approach">Об ателье</a><a href="#contacts">Контакты</a></nav></details>
+</header>
+<main id="main">
+<section class="hero wrap" id="top" aria-labelledby="hero-title">
+  <div class="hero-copy">
+    <p class="eyebrow"><span class="tiny-star" aria-hidden="true">✳</span> ВОЛГОГРАД · АНГАРСКАЯ, 114</p>
+    <h1 id="hero-title">Любимым вещам —<br><em>новая история.</em></h1>
+    <p class="hero-desc">Шьём по вашей задумке. Возвращаем форму,<br class="desktop-break"> цвет и характер вещам, с которыми<br class="desktop-break"> не хочется расставаться.</p>
+    <a class="button primary" href="#services">Найти свою услугу <span aria-hidden="true">↗</span></a>
+    <div class="hero-bottom"><span>КОЖА · МЕХ · ТКАНЬ</span><a href="#works">Прикоснуться к мастерству <span aria-hidden="true">↓</span></a></div>
+  </div>
+  <figure class="hero-visual">
+    <picture><source media="(max-width:600px)" srcset="assets/atelier-editorial-small.webp"><img src="assets/atelier-editorial.webp" width="1536" height="1024" alt="Складки натуральной ткани, портновские ножницы и сантиметровая лента" fetchpriority="high"></picture>
+    <div class="photo-corner" aria-hidden="true">GH<span>THE ART OF<br>MAKING IT YOURS</span></div>
+    <div class="image-tag"><span class="tag-star" aria-hidden="true">✳</span> СОЗДАВАТЬ.<br>БЕРЕЧЬ. НОСИТЬ.</div>
+    <figcaption>Фактура ремесла / редакционная AI-иллюстрация</figcaption>
+  </figure>
+</section>
+<div class="material-band" aria-label="Направления работы"><div class="wrap"><span>Индивидуальный пошив</span><i aria-hidden="true">✳</i><span>Бережная реставрация</span><i aria-hidden="true">✳</i><span>Ремонт и перекрой</span><i aria-hidden="true">✳</i><span>Покраска изделий</span></div></div>
+<section class="section wrap services" id="services" aria-labelledby="services-title">
+  <div class="section-heading"><p class="eyebrow">01 / ТО, ЧТО МЫ ДЕЛАЕМ</p><div><h2 id="services-title">У каждой вещи<br>есть <em>продолжение.</em></h2><p class="section-intro">От первой идеи до последнего стежка.<br>Выберите материал — подскажем, чем можем помочь.</p></div></div>
+  <div class="service-layout">
+    <aside class="material-picker"><span class="small-label">С ЧЕМ РАБОТАЕМ</span>
+      <div class="material-buttons" role="group" aria-label="Выбор материала">
+        <button class="material active" data-material="leather" aria-pressed="true"><span class="swatch leather" aria-hidden="true"></span>Кожа <span aria-hidden="true">↗</span></button>
+        <button class="material" data-material="fur" aria-pressed="false"><span class="swatch fur" aria-hidden="true"></span>Мех <span aria-hidden="true">↗</span></button>
+        <button class="material" data-material="textile" aria-pressed="false"><span class="swatch textile" aria-hidden="true"></span>Ткань <span aria-hidden="true">↗</span></button>
+      </div>
+      <p id="material-note" class="material-note" aria-live="polite">Одежда, сумки, обувь и аксессуары. А ещё — кожаная мебель и салоны автомобилей.</p>
+      <span class="stitched-mark" aria-hidden="true">gh / made with care</span>
+    </aside>
+    <div class="service-list">
+      <details class="service" open><summary><span class="service-number">01</span><h3>Индивидуальный пошив</h3><span class="service-plus" aria-hidden="true">+</span></summary><div class="service-body"><p id="copy-tailor">Куртка, сумка, обувь или комплект аксессуаров — по вашей идее, из натуральной кожи. Возможен пошив из вашего материала.</p><a href="https://t.me/GHLeather" target="_blank" rel="noopener">Обсудить задумку ↗</a></div></details>
+      <details class="service"><summary><span class="service-number">02</span><h3>Ремонт и реставрация</h3><span class="service-plus" aria-hidden="true">+</span></summary><div class="service-body"><p id="copy-restore">Восстановление изделий из кожи, меха и ткани, ремонт одежды и аксессуаров. Расскажите, что случилось с вещью, — обсудим подходящую работу.</p><a href="https://t.me/GHLeather" target="_blank" rel="noopener">Показать вещь мастеру ↗</a></div></details>
+      <details class="service"><summary><span class="service-number">03</span><h3>Перекрой и посадка</h3><span class="service-plus" aria-hidden="true">+</span></summary><div class="service-body"><p id="copy-alter">Изменение фасона, переделка и подгонка по фигуре. Поможем по-новому посмотреть на вещь, которую вы уже любите.</p><a href="https://t.me/GHLeather" target="_blank" rel="noopener">Обсудить переделку ↗</a></div></details>
+      <details class="service"><summary><span class="service-number">04</span><h3 id="finish-title">Покраска и уход</h3><span class="service-plus" aria-hidden="true">+</span></summary><div class="service-body"><p id="copy-finish">Покраска кожаной одежды, обуви, сумок, мебели и автомобильных салонов. Подбор цвета и объём работ обсуждаются индивидуально.</p><a href="https://t.me/GHLeather" target="_blank" rel="noopener">Уточнить возможности ↗</a></div></details>
+      <p class="price-note">Стоимость зависит от материала, состояния и сложности задачи.<br>Уточните её у мастера до оформления заказа.</p>
+    </div>
+  </div>
+</section>
+<section class="works-section" id="works" aria-labelledby="works-title"><div class="wrap">
+  <div class="works-heading"><div><p class="eyebrow">02 / ДЕТАЛИ И ХАРАКТЕР</p><h2 id="works-title">Говорят <em>вещи.</em></h2></div><p>Кожа с характером. Форма со смыслом.<br>Фотографии из галереи GH-Leather.</p></div>
+  <div class="works-grid">
+    <figure class="work"><a class="gallery-link" href="assets/work-1.jpg" data-index="0" aria-label="Открыть фото: кожаный портфель"><div class="work-photo"><img src="assets/work-1.jpg" width="500" height="500" loading="lazy" alt="Коричневый кожаный портфель с двумя пряжками из галереи GH-Leather"><span class="zoom" aria-hidden="true">↗</span></div></a><figcaption><span>01 / КОЖАНЫЙ ПОРТФЕЛЬ</span><span>Форма и фактура</span></figcaption></figure>
+    <figure class="work work-offset"><a class="gallery-link" href="assets/work-2.jpg" data-index="1" aria-label="Открыть фото: сумка с контрастной отделкой"><div class="work-photo"><img src="assets/work-2.jpg" width="689" height="500" loading="lazy" alt="Сумка из тёмной фактурной кожи с золотистой вставкой из галереи GH-Leather"><span class="zoom" aria-hidden="true">↗</span></div></a><figcaption><span>02 / КОНТРАСТНАЯ ОТДЕЛКА</span><span>Акцент в деталях</span></figcaption></figure>
+    <figure class="work"><a class="gallery-link" href="assets/work-3.jpg" data-index="2" aria-label="Открыть фото: фактурная кожаная сумка"><div class="work-photo"><img src="assets/work-3.jpg" width="887" height="500" loading="lazy" alt="Объёмная сумка из фактурной кожи оливкового оттенка из галереи GH-Leather"><span class="zoom" aria-hidden="true">↗</span></div></a><figcaption><span>03 / НАТУРАЛЬНАЯ ФАКТУРА</span><span>У каждого материала — свой голос</span></figcaption></figure>
+  </div>
+  <a class="text-link archive-link" href="https://gh-leather.ru/Сумки" target="_blank" rel="noopener">Больше работ в галерее ателье <span aria-hidden="true">↗</span></a>
+</div></section>
+<section class="section wrap approach" id="approach" aria-labelledby="approach-title">
+  <div class="approach-sign" aria-hidden="true"><span>gh</span><svg viewBox="0 0 200 120" fill="none"><path d="M15 78C30 8 165 3 182 62C198 119 28 124 15 78Z" stroke="currentColor" stroke-width="1" stroke-dasharray="3 5"/><path d="M30 100L177 20" stroke="currentColor" stroke-width="1"/></svg><small>МАТЕРИАЛ. ФОРМА. ЧЕЛОВЕК.</small></div>
+  <div><p class="eyebrow">03 / ФИЛОСОФИЯ АТЕЛЬЕ</p><h2 id="approach-title">Не просто сшить.<br><em>Сделать вашим.</em></h2><p class="approach-lead">Новый силуэт или знакомая вещь, которой нужен второй шанс, — всё начинается с вашего желания.</p><p>В GH-Leather работают с кожей, мехом и тканью: создают одежду и аксессуары, меняют крой, восстанавливают изделия. Можно прийти со своей идеей и материалом.</p><div class="process"><div><span>01 / РАССКАЗАТЬ</span><p>Опишите задачу или покажите вещь мастеру.</p></div><div><span>02 / ОБСУДИТЬ</span><p>Уточните варианты работы, стоимость и сроки.</p></div><div><span>03 / СОЗДАТЬ</span><p>Передайте материал или изделие в ателье.</p></div></div></div>
+</section>
+<section class="faq-section wrap" aria-labelledby="faq-title">
+  <div><p class="eyebrow">НЕСКОЛЬКО ОТВЕТОВ</p><h2 id="faq-title">Перед<br><em>знакомством.</em></h2></div>
+  <div class="faq-list">
+    <details><summary>Можно ли принести свой материал?<span aria-hidden="true">+</span></summary><p>Да, ателье принимает заказы из материала клиента. Достаточность и пригодность материала для вашей идеи лучше обсудить с мастером заранее.</p></details>
+    <details><summary>Вы работаете только с одеждой?<span aria-hidden="true">+</span></summary><p>Также с сумками, обувью и аксессуарами, кожаной мебелью и салонами автомобилей. Среди дополнительных услуг — чистка подушек и ремонт швейных машин.</p></details>
+    <details><summary>Как узнать цену и сроки?<span aria-hidden="true">+</span></summary><p>Позвоните или напишите в Telegram: расскажите о задаче, материале и состоянии изделия. Стоимость и сроки нужно уточнить у мастера; фиксированного прайса на этой странице нет.</p></details>
+    <details><summary>Как можно оплатить заказ?<span aria-hidden="true">+</span></summary><p>На сайте ателье указана оплата картой, по QR-коду, банковским переводом и наличными. Детали расчёта уточните при заказе.</p></details>
+  </div>
+</section>
+<section class="contact-section" id="contacts" aria-labelledby="contact-title"><div class="wrap contact-inner">
+  <p class="eyebrow">04 / ДАВАЙТЕ ЗНАКОМИТЬСЯ</p>
+  <div class="contact-top"><h2 id="contact-title">Ваша идея.<br><em>Наше ремесло.</em></h2><div class="contact-cta"><p>Расскажите о вещи, которую хотите<br>создать или сохранить.</p><a class="button light" href="https://t.me/GHLeather" target="_blank" rel="noopener">Написать в Telegram <span aria-hidden="true">↗</span></a><a class="contact-phone" href="tel:+78442503299">+7 (8442) 50-32-99</a></div></div>
+  <div class="contact-details"><div><span class="small-label">ПРИХОДИТЕ В АТЕЛЬЕ</span><p>Волгоград, ул. Ангарская, 114</p><small>Рядом с поликлиникой № 30.<br>Вход с торца магазина «МАН».</small><a href="https://yandex.ru/maps/org/gh_leyder/1294505172/" target="_blank" rel="noopener">Построить маршрут ↗</a></div><div><span class="small-label">ЧАСЫ РАБОТЫ</span><p>Пн–пт <span>09:00–19:00</span><br>Сб–вс <span>10:00–18:00</span></p><small>Перед визитом в праздничный день<br>уточните расписание по телефону.</small></div><div><span class="small-label">ОСТАЁМСЯ НА СВЯЗИ</span><a href="tel:+79275103299">+7 (927) 510-32-99</a><a href="mailto:admin@gh-leather.ru">admin@gh-leather.ru</a><a href="https://vk.com/gh_leather" target="_blank" rel="noopener">ВКонтакте ↗</a></div></div>
+</div></section>
+</main>
+<footer class="footer wrap"><a class="footer-brand" href="#top">GH-LEATHER</a><span>КОЖА. МЕХ. ТКАНЬ. ВАША ИСТОРИЯ.</span><a href="#top">Наверх ↑</a><p>Локальная концепция нового сайта. Данные — с <a href="https://gh-leather.ru/" target="_blank" rel="noopener">официального сайта ателье</a>, проверены 02.11.2026.</p></footer>
+<dialog class="lightbox" aria-labelledby="gallery-caption"><div class="lightbox-top"><span id="gallery-counter">01 / 03</span><button class="close-gallery" aria-label="Закрыть фотографию">Закрыть ×</button></div><img id="gallery-image" src="assets/work-1.jpg" alt=""><div class="lightbox-bottom"><button class="prev-photo" aria-label="Предыдущее фото">←</button><p id="gallery-caption">Кожаный портфель</p><button class="next-photo" aria-label="Следующее фото">→</button></div></dialog>
+</body></html>
