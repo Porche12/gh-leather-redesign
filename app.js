@@ -19,7 +19,7 @@ function animateService(service){
  body.animate([{opacity:0,transform:'translateY(-8px)',clipPath:'inset(0 0 100% 0)'},{opacity:1,transform:'translateY(0)',clipPath:'inset(0 0 0 0)'}],{duration:420,easing:'cubic-bezier(.2,.7,.2,1)'});
 }
 document.querySelectorAll('.service').forEach(service=>service.addEventListener('toggle',()=>{if(service.open)animateService(service);}));
-document.querySelectorAll('.service-shortcuts a').forEach(link=>link.addEventListener('click',event=>{
+document.querySelectorAll('.service-shortcuts a, .service-jump').forEach(link=>link.addEventListener('click',event=>{
  const service=document.querySelector(link.getAttribute('href'));
  if(!service)return;
  event.preventDefault();
@@ -32,27 +32,6 @@ document.querySelectorAll('.service-shortcuts a').forEach(link=>link.addEventLis
 const menu=document.querySelector('.mobile-menu');
 menu.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{menu.open=false;}));
 document.addEventListener('keydown',event=>{if(event.key==='Escape' && menu.open){menu.open=false;menu.querySelector('summary').focus();}});
-const gallery=document.querySelector('.lightbox');
-const photos=[...document.querySelectorAll('.gallery-link')];
-const titles=['Кожаный портфель','Сумка с контрастной отделкой','Фактурная кожаная сумка'];
-let photoIndex=0;let galleryOpener=null;
-function showPhoto(index){
- photoIndex=(index+photos.length)%photos.length;
- const image=document.querySelector('#gallery-image');
- image.src=photos[photoIndex].getAttribute('href');image.alt=photos[photoIndex].querySelector('img').alt;
- document.querySelector('#gallery-caption').textContent=titles[photoIndex];
- document.querySelector('#gallery-counter').textContent='Галерея ателье';
-}
-photos.forEach((link,index)=>link.addEventListener('click',event=>{
- if(typeof gallery.showModal!=='function')return;
- event.preventDefault();galleryOpener=link;showPhoto(index);gallery.showModal();document.querySelector('.close-gallery').focus();
-}));
-document.querySelector('.close-gallery').addEventListener('click',()=>gallery.close());
-document.querySelector('.prev-photo').addEventListener('click',()=>showPhoto(photoIndex-1));
-document.querySelector('.next-photo').addEventListener('click',()=>showPhoto(photoIndex+1));
-gallery.addEventListener('keydown',event=>{if(event.key==='ArrowRight'){event.preventDefault();showPhoto(photoIndex+1);}if(event.key==='ArrowLeft'){event.preventDefault();showPhoto(photoIndex-1);}});
-gallery.addEventListener('click',event=>{if(event.target===gallery){const r=gallery.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)gallery.close();}});
-gallery.addEventListener('close',()=>galleryOpener?.focus());
 // Local GSAP from the toolkit. Never require animation for access to content.
 if(window.gsap && window.ScrollTrigger){
  gsap.registerPlugin(ScrollTrigger);
@@ -68,6 +47,8 @@ if(window.gsap && window.ScrollTrigger){
    gsap.from(element,{y:24,duration:.75,ease:'power2.out',clearProps:'all',scrollTrigger:{trigger:element,start:'top 92%',once:true}});
   });
   gsap.from('.service summary',{x:22,opacity:0,duration:.65,stagger:.09,ease:'power2.out',clearProps:'all',scrollTrigger:{trigger:'.service-list',start:'top 88%',once:true}});
+  gsap.from('.style-banner',{y:34,opacity:0,duration:.8,stagger:.12,ease:'power2.out',clearProps:'all',scrollTrigger:{trigger:'.mood-banners',start:'top 88%',once:true}});
+  gsap.from('.style-banner img',{scale:1.13,duration:1.2,stagger:.12,ease:'power2.out',clearProps:'all',scrollTrigger:{trigger:'.mood-banners',start:'top 88%',once:true}});
   return ()=>document.removeEventListener('atelier:intro-finished',revealHero);
  });
 }

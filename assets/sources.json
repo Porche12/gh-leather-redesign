@@ -1,5 +1,20 @@
 {
-  "work-1.jpg": "https://gh-leather.ru/media/djmediatools/cache/900x500-toheight-90-images_foto_user_sumky_1.jpg",
-  "work-2.jpg": "https://gh-leather.ru/media/djmediatools/cache/900x500-toheight-90-images_foto_user_sumky_3.jpg",
-  "work-3.jpg": "https://gh-leather.ru/media/djmediatools/cache/900x500-toheight-90-images_foto_user_sumky_18.jpg"
+  "banner-leather.webp": {
+    "source_page": "https://unsplash.com/photos/a-person-in-a-leather-jacket-and-sunglasses-TzgDVorAGOM",
+    "photographer": "Marcin Sajur",
+    "profile": "https://unsplash.com/@m_sajur",
+    "license": "https://unsplash.com/license"
+  },
+  "banner-coat.webp": {
+    "source_page": "https://unsplash.com/photos/various-coats-and-jackets-hanging-on-a-closet-rack-Byk1g2DPQcI",
+    "photographer": "Kamilla Isalieva",
+    "profile": "https://unsplash.com/@kamillaisalieva",
+    "license": "https://unsplash.com/license"
+  },
+  "banner-workshop.webp": {
+    "source_page": "https://unsplash.com/photos/a-seamstress-works-on-designs-in-her-studio-pHFgs0oihAc",
+    "photographer": "Vitaly Gariev",
+    "profile": "https://unsplash.com/@silverkblack",
+    "license": "https://unsplash.com/license"
+  }
 }
