@@ -1,8 +1,8 @@
 /* Core content and navigation remain available without JavaScript. */
 const materialData = {
- leather: {note:'Одежда · сумки · обувь · мебель',tailor:'Пошив одежды и аксессуаров по вашей идее.',restore:'Ремонт и восстановление кожи и аксессуаров.',alter:'Новый фасон и посадка по фигуре.',finish:'Обновление цвета кожи и аксессуаров.',title:'Покраска и уход'},
- fur: {note:'Шубы · дублёнки · меховые жилеты',tailor:'Пошив меховой одежды на заказ.',restore:'Ремонт и восстановление меховых изделий.',alter:'Изменение фасона и посадки меховой одежды.',finish:'Покраска и чистка меха. Детали уточните у мастера.',title:'Покраска и чистка'},
- textile: {note:'Одежда · платья · домашний текстиль',tailor:'Пошив одежды по вашим меркам и идее.',restore:'Ремонт одежды, трикотажа и замена молний.',alter:'Подгонка, изменение фасона и перекрой.',finish:'Чистка подушек и ремонт швейных машин.',title:'Дополнительные услуги'}
+ leather: {note:'Одежда · сумки · обувь · мебель',tailor:'Пошив одежды и аксессуаров по вашей идее.',restore:'Ремонт и восстановление кожи и аксессуаров.',alter:'Новый фасон и посадка по фигуре.',finish:'Обновление цвета кожи и аксессуаров.',title:'Покраска и уход',image:'assets/banner-leather.webp',alt:'Модель в чёрной кожаной куртке',kicker:'КОЖА · ИНДИВИДУАЛЬНЫЙ ПОШИВ',bannerTitle:'Силуэт с характером.',service:'#service-tailor',cta:'Индивидуальный пошив'},
+ fur: {note:'Шубы · дублёнки · меховые жилеты',tailor:'Пошив меховой одежды на заказ.',restore:'Ремонт и восстановление меховых изделий.',alter:'Изменение фасона и посадки меховой одежды.',finish:'Покраска и чистка меха. Детали уточните у мастера.',title:'Покраска и чистка',image:'assets/banner-coat.webp',alt:'Фактурные пальто и куртки на вешалках',kicker:'МЕХ · ВЕРХНЯЯ ОДЕЖДА',bannerTitle:'Любимый силуэт надолго.',service:'#service-repair',cta:'Ремонт и реставрация'},
+ textile: {note:'Одежда · платья · домашний текстиль',tailor:'Пошив одежды по вашим меркам и идее.',restore:'Ремонт одежды, трикотажа и замена молний.',alter:'Подгонка, изменение фасона и перекрой.',finish:'Чистка подушек и ремонт швейных машин.',title:'Дополнительные услуги',image:'assets/banner-workshop.webp',alt:'Портниха работает за швейной машиной в светлой мастерской',kicker:'ТЕКСТИЛЬ · ТОЧНАЯ ПОСАДКА',bannerTitle:'Вещь по вашим меркам.',service:'#service-alter',cta:'Перекрой и посадка'}
 };
 const materialButtons = [...document.querySelectorAll('[data-material]')];
 materialButtons.forEach(button => button.addEventListener('click', () => {
@@ -11,6 +11,18 @@ materialButtons.forEach(button => button.addEventListener('click', () => {
  document.querySelector('#material-note').textContent=data.note;
  ['tailor','restore','alter','finish'].forEach(key => document.querySelector('#copy-'+key).textContent=data[key]);
  document.querySelector('#finish-title').textContent=data.title;
+ const hero=document.querySelector('#hero-materials'),image=document.querySelector('#hero-material-image'),copy=document.querySelector('.hero-material-copy');
+ if(hero && image){
+  hero.dataset.activeMaterial=button.dataset.material;
+  document.querySelector('#hero-material-kicker').textContent=data.kicker;
+  document.querySelector('#hero-material-title').textContent=data.bannerTitle;
+  const link=document.querySelector('#hero-material-link');link.href=data.service;link.firstChild.textContent=data.cta+' ';
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){image.src=data.image;image.alt=data.alt;}
+  else{
+   image.classList.add('is-changing');copy.classList.add('is-changing');
+   setTimeout(()=>{image.src=data.image;image.alt=data.alt;image.onload=()=>image.classList.remove('is-changing');if(image.complete)image.classList.remove('is-changing');copy.classList.remove('is-changing');},140);
+  }
+ }
 }));
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 function animateService(service){

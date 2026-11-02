@@ -4,11 +4,11 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f4f0e8">
 <title>GH-Leather — ателье кожи, меха и ткани в Волгограде</title>
 <meta name="description" content="Индивидуальный пошив, ремонт, реставрация и покраска одежды, сумок и аксессуаров. GH-Leather: Волгоград, ул. Ангарская, 114.">
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css?v=banners-1"><link rel="stylesheet" href="experience.css?v=banners-1">
-<script defer src="assets/lib/gsap.min.js"></script><script defer src="assets/lib/ScrollTrigger.min.js"></script><script defer src="app.js?v=banners-1"></script><script type="module" src="studio.js?v=banners-1"></script>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css?v=materials-2"><link rel="stylesheet" href="experience.css?v=materials-2">
+<script defer src="assets/lib/gsap.min.js"></script><script defer src="assets/lib/ScrollTrigger.min.js"></script><script defer src="app.js?v=materials-2"></script>
 </head>
 <body>
-<script src="loader.js?v=banners-1"></script>
+<script src="loader.js?v=materials-2"></script>
 <a class="skip" href="#main">Перейти к содержимому</a>
 <header class="header wrap">
   <a class="brand" href="#top" aria-label="GH-Leather — на главную"><span class="brand-icon" aria-hidden="true">gh<span>✳</span></span><span>GH-LEATHER<small>САЛОН · АТЕЛЬЕ</small></span></a>
@@ -28,23 +28,21 @@
       <a href="#service-alter">Перекрой <span aria-hidden="true">↗</span></a>
       <a href="#service-dye">Покраска <span aria-hidden="true">↗</span></a>
     </nav>
-    <div class="hero-bottom"><span>КОЖА · МЕХ · ТКАНЬ</span><a href="#studio">Крутить сумку <span aria-hidden="true">↓</span></a></div>
+    <div class="hero-bottom"><span>КОЖА · МЕХ · ТКАНЬ</span><a href="#hero-materials">Выбрать материал <span aria-hidden="true">↓</span></a></div>
   </div>
-  <figure class="hero-visual hero-model" id="studio">
-    <div class="studio-stage" id="model-stage" aria-busy="true">
-      <svg class="model-poster" viewBox="0 0 700 560" role="img" aria-label="Иллюстрация кожаной сумки"><defs><linearGradient id="bag-poster" x2="1" y2="1"><stop stop-color="#89563a"/><stop offset="1" stop-color="#35261f"/></linearGradient></defs><ellipse cx="350" cy="457" rx="150" ry="18" fill="#000" opacity=".08"/><g fill="url(#bag-poster)" stroke="#b19775" stroke-width="2"><rect x="200" y="225" width="300" height="215" rx="30"/><path d="M210 233H490V310L468 337H232L210 310Z"/><path d="M272 225V169Q272 112 350 112Q428 112 428 169V225" fill="none" stroke="#5d3c2a" stroke-width="16"/><path d="M275 245V380M425 245V380" stroke-width="13"/><rect x="261" y="335" width="28" height="32" rx="4" fill="none"/><rect x="411" y="335" width="28" height="32" rx="4"/></g><text x="350" y="505" text-anchor="middle" fill="#625f57" font-size="12" font-family="Arial">Кожа. Форма. Характер.</text></svg>
-      <span class="studio-watermark" aria-hidden="true">gh</span>
-      <div class="hero-model-panel">
-        <div class="hero-model-top"><span>СУМКА · 3D-ЭСКИЗ</span><span>ПОТЯНИТЕ, ЧТОБЫ ПОВЕРНУТЬ</span></div>
-        <div class="hero-model-tools">
-          <div class="model-colors" role="group" aria-label="Цвет кожи"><button data-color="#493326" aria-label="Эспрессо" aria-pressed="true" class="active" style="--leather-color:#493326"></button><button data-color="#995a32" aria-label="Коньячный" aria-pressed="false" style="--leather-color:#995a32"></button><button data-color="#693331" aria-label="Бордовый" aria-pressed="false" style="--leather-color:#693331"></button><span id="color-name" class="visually-hidden" aria-live="polite">Эспрессо</span></div>
-          <div class="model-actions" role="group" aria-label="Управление моделью"><button data-turn="-1" aria-label="Повернуть влево">↶</button><button data-turn="1" aria-label="Повернуть вправо">↷</button><button id="model-reset">Сбросить</button></div>
-          <label class="model-zoom" for="model-scale"><span>Масштаб</span><input id="model-scale" type="range" min="80" max="135" value="100" aria-label="Масштаб модели"></label>
-        </div>
+  <figure class="hero-visual material-hero" id="hero-materials" data-active-material="leather">
+    <div class="hero-material-scene">
+      <img id="hero-material-image" src="assets/banner-leather.webp" width="1400" height="920" alt="Модель в чёрной кожаной куртке" fetchpriority="high">
+      <span class="hero-material-shade" aria-hidden="true"></span>
+      <span class="hero-material-credit">ВИЗУАЛЬНОЕ ВДОХНОВЕНИЕ · UNSPLASH</span>
+      <div class="hero-material-copy" aria-live="polite"><span id="hero-material-kicker">КОЖА · ИНДИВИДУАЛЬНЫЙ ПОШИВ</span><h2 id="hero-material-title">Силуэт с характером.</h2><a class="hero-material-link service-jump" id="hero-material-link" href="#service-tailor">Индивидуальный пошив <span aria-hidden="true">↗</span></a></div>
+      <div class="hero-material-choices" role="group" aria-label="Выбрать материал">
+        <button class="hero-material-choice active" type="button" data-material="leather" aria-pressed="true">Кожа</button>
+        <button class="hero-material-choice" type="button" data-material="fur" aria-pressed="false">Мех</button>
+        <button class="hero-material-choice" type="button" data-material="textile" aria-pressed="false">Ткань</button>
       </div>
-      <span class="studio-hint visually-hidden" id="model-hint">Перетаскивайте сумку, чтобы рассмотреть форму</span>
     </div>
-    <figcaption>Интерактивная модель кожаной сумки</figcaption>
+    <figcaption>Одежда как вдохновение — фото из открытой коллекции Unsplash.</figcaption>
   </figure>
 </section>
 <section class="section wrap services" id="services" aria-labelledby="services-title">
